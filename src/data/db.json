@@ -1,0 +1,40 @@
+{
+  "currencyData": [
+    {
+      "date": "2024-11-17",
+      "prices": [
+        {
+          "amount": 5,
+          "quantity": 80,
+          "total": 400
+        },
+        {
+          "amount": 10,
+          "quantity": 220,
+          "total": 2200
+        },
+        {
+          "amount": 50,
+          "quantity": 460,
+          "total": 23000
+        },
+        {
+          "amount": 100,
+          "quantity": 300,
+          "total": 30000
+        },
+        {
+          "amount": 500,
+          "quantity": 800,
+          "total": 400000
+        },
+        {
+          "amount": 1000,
+          "quantity": 1000,
+          "total": 1000000
+        }
+      ],
+      "total": 1455600
+    }
+  ]
+}

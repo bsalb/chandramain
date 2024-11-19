@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
-import { CurrencyData } from "@/lib/db";
+import { CurrencyList } from "@prisma/client";
+import { formatDateToString } from "@/lib/formateDate";
 
 interface Props {
-  data: CurrencyData[];
+  data: CurrencyList[];
 }
 
 const ResultTable = ({ data }: Props) => {
@@ -24,7 +25,9 @@ const ResultTable = ({ data }: Props) => {
             {data.map((entry, index) => (
               <tr key={index}>
                 <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{entry.date}</td>
+                <td className="border px-4 py-2">
+                  {formatDateToString(entry.date)}
+                </td>
                 <td className="border px-4 py-2">{entry.total}</td>
               </tr>
             ))}

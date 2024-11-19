@@ -1,14 +1,15 @@
 "use client";
+import { formatDateToString } from "@/lib/formateDate";
+import { CurrencyList } from "@/types";
 import React, { useState, useMemo, useCallback } from "react";
-import { CurrencyData } from "@/lib/db";
 
 interface Props {
-  data: CurrencyData[];
+  data: CurrencyList[];
 }
 
 const DataTable = ({ data }: Props) => {
   const calculateTotals = useCallback(
-    (data: CurrencyData[]): CurrencyData[] => {
+    (data: CurrencyList[]): CurrencyList[] => {
       return data.map((entry) => {
         let total = 0;
         entry.prices.forEach((price) => {
@@ -22,7 +23,7 @@ const DataTable = ({ data }: Props) => {
     []
   );
 
-  const [document, setDocument] = useState<CurrencyData[]>(
+  const [document, setDocument] = useState<CurrencyList[]>(
     calculateTotals(data)
   );
 
@@ -32,7 +33,8 @@ const DataTable = ({ data }: Props) => {
   });
 
   const filteredData = useMemo(
-    () => data.filter((entry) => entry.date === selectedDate),
+    () =>
+      data.filter((entry) => formatDateToString(entry.date) === selectedDate),
     [data, selectedDate]
   );
 

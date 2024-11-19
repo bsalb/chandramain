@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { saveData } from "../actions";
+import { saveData } from "../actions/currencyActions";
 import { CustomInput } from "../components/CustomInput";
 
 const CreateDataPage = () => {

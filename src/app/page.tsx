@@ -1,14 +1,16 @@
 import Link from "next/link";
 
-import { getAllData } from "./actions";
+import { getAllData } from "./actions/currencyActions";
 import DataTable from "./components/DataTable";
 import ResultTable from "./components/Result";
+import { formatDateToString } from "@/lib/formateDate";
 
 export default async function Home() {
   const data = await getAllData();
 
   const todayData = data.some(
-    (item) => item.date === new Date().toISOString().split("T")[0]
+    (item) =>
+      formatDateToString(item.date) === new Date().toISOString().split("T")[0]
   );
 
   return (

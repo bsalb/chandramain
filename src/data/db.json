@@ -35,6 +35,43 @@
         }
       ],
       "total": 1455600
+    },
+    {
+      "date": "2024-11-19",
+      "prices": [
+        {
+          "amount": 5,
+          "quantity": 10,
+          "total": 50
+        },
+        {
+          "amount": 10,
+          "quantity": 50,
+          "total": 500
+        },
+        {
+          "amount": 50,
+          "quantity": 800,
+          "total": 40000
+        },
+        {
+          "amount": 100,
+          "quantity": 0,
+          "total": 0
+        },
+        {
+          "amount": 500,
+          "quantity": 0,
+          "total": 0
+        },
+        {
+          "amount": 1000,
+          "quantity": 2000,
+          "total": 2000000
+        }
+      ],
+      "bankDeposit": 650000,
+      "total": 2690550
     }
   ]
 }

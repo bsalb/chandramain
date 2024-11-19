@@ -9,6 +9,7 @@ export interface CurrencyData {
     quantity: number;
     total: number;
   }[];
+  bankDeposit: number;
   total: number;
 }
 

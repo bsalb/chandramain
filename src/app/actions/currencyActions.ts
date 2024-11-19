@@ -35,7 +35,7 @@ export async function saveData(newData: {
   });
 
   if (existingData) {
-    alert("Data for this date already exists.");
+    throw new Error("Data for this date already exists.");
   }
 
   const savedData = await prisma.currencyList.create({
@@ -64,7 +64,7 @@ export async function getDataByDate(date: string) {
   });
 
   if (!data) {
-    alert("No data found for this date.");
+    throw new Error("No data found for this date.");
   }
 
   return data;

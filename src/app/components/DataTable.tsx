@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CurrencyList } from "@/types";
 import { formatDateToString } from "@/lib/formateDate";
 import { getDataByDate } from "../actions/currencyActions";
+import toast from "react-hot-toast";
 
 const DataTable = () => {
   const [data, setData] = useState<CurrencyList>();
@@ -13,9 +14,13 @@ const DataTable = () => {
   );
 
   const fetchData = async (date: string) => {
-    const data = await getDataByDate(date);
-    if (data) {
-      setData(data);
+    try {
+      const data = await getDataByDate(date);
+      if (data) {
+        setData(data);
+      }
+    } catch (error) {
+      toast.error("No data found...");
     }
   };
 

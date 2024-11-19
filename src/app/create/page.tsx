@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 import { saveData } from "../actions/currencyActions";
 import { CustomInput } from "../components/CustomInput";
@@ -60,10 +61,10 @@ const CreateDataPage = () => {
         total: calculateOverallTotal(),
       };
       await saveData(payload);
-      alert("Data successfully saved.");
+      toast.success("Data successfully saved.");
       router.push("/");
     } catch (error) {
-      alert("Failed to save data");
+      toast.error("Failed to save data.");
     } finally {
       setLoading(false);
     }
@@ -71,6 +72,7 @@ const CreateDataPage = () => {
 
   return (
     <div className="flex flex-col gap-2 p-4">
+      <Toaster position="top-right" reverseOrder={false} />
       <span
         className="font-bold text-sm cursor-pointer hover:underline"
         onClick={() => router.back()}

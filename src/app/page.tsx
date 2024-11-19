@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import { getPaginatedData } from "./actions/currencyActions";
 import DataTable from "./components/DataTable";
 import ResultTable from "./components/Result";
@@ -7,6 +8,7 @@ export default async function Home() {
 
   return (
     <div className="w-full h-full">
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="w-full flex  flex-col  gap-10 p-4">
         <div className="w-full">
           <DataTable />

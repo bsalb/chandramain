@@ -1,5 +1,6 @@
 "use server";
 
+import { PAGE_SIZE } from "@/constants";
 import { prisma } from "../../lib/client";
 
 export async function getAllData() {
@@ -9,18 +10,32 @@ export async function getAllData() {
   return data;
 }
 
+export async function getPaginatedData(page: number) {
+  const data = await prisma.currencyList.findMany({
+    include: { prices: true },
+    orderBy: { date: "asc" },
+    skip: (page - 1) * PAGE_SIZE,
+    take: PAGE_SIZE,
+  });
+
+  const totalCount = await prisma.currencyList.count();
+
+  return { data, totalCount };
+}
+
 export async function saveData(newData: {
   date: string;
   prices: { amount: number; quantity: number; total: number }[];
   total: number;
   bankDeposit: number;
+  qrDeposit: number;
 }) {
   const existingData = await prisma.currencyList.findUnique({
     where: { date: new Date(newData.date) },
   });
 
   if (existingData) {
-    throw new Error("Data for this date already exists.");
+    alert("Data for this date already exists.");
   }
 
   const savedData = await prisma.currencyList.create({
@@ -28,6 +43,7 @@ export async function saveData(newData: {
       date: new Date(newData.date),
       total: newData.total,
       bankDeposit: newData.bankDeposit,
+      qrDeposit: newData.qrDeposit,
       prices: {
         create: newData.prices.map((price) => ({
           amount: price.amount,
@@ -48,7 +64,7 @@ export async function getDataByDate(date: string) {
   });
 
   if (!data) {
-    throw new Error("No data found for this date.");
+    alert("No data found for this date.");
   }
 
   return data;

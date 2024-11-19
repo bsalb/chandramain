@@ -1,0 +1,26 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CurrencyList {
+  id       Int     @id @default(autoincrement())
+  date     DateTime @unique
+  bankDeposit Int
+  total    Float
+  prices   Currency[]
+}
+
+model Currency {
+  id            Int     @id @default(autoincrement())
+  amount        Float
+  quantity      Int
+  total         Float
+  currencyData  CurrencyList @relation(fields: [currencyDataId], references: [id])
+  currencyDataId Int
+}

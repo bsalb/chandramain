@@ -11,5 +11,6 @@ export interface CurrencyList {
   date: Date;
   prices: CurrencyDetail[];
   bankDeposit: number;
+  qrDeposit: number;
   total: number;
 }

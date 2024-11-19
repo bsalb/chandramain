@@ -1,49 +1,34 @@
 "use client";
-import { formatDateToString } from "@/lib/formateDate";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+
 import { CurrencyList } from "@/types";
-import React, { useState, useMemo, useCallback } from "react";
+import { formatDateToString } from "@/lib/formateDate";
+import { getDataByDate } from "../actions/currencyActions";
 
-interface Props {
-  data: CurrencyList[];
-}
-
-const DataTable = ({ data }: Props) => {
-  const calculateTotals = useCallback(
-    (data: CurrencyList[]): CurrencyList[] => {
-      return data.map((entry) => {
-        let total = 0;
-        entry.prices.forEach((price) => {
-          price.total = price.amount * price.quantity;
-          total += price.total;
-        });
-        entry.total = total;
-        return entry;
-      });
-    },
-    []
+const DataTable = () => {
+  const [data, setData] = useState<CurrencyList>();
+  const [selectedDate, setSelectedDate] = useState<string>(
+    formatDateToString(new Date())
   );
 
-  const [document, setDocument] = useState<CurrencyList[]>(
-    calculateTotals(data)
-  );
+  const fetchData = async (date: string) => {
+    const data = await getDataByDate(date);
+    if (data) {
+      setData(data);
+    }
+  };
 
-  const [selectedDate, setSelectedDate] = useState<string>(() => {
-    const today = new Date().toISOString().split("T")[0];
-    return today;
-  });
-
-  const filteredData = useMemo(
-    () =>
-      data.filter((entry) => formatDateToString(entry.date) === selectedDate),
-    [data, selectedDate]
-  );
+  useEffect(() => {
+    fetchData(selectedDate);
+  }, [selectedDate]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(e.target.value);
   };
 
   return (
-    <div>
+    <div className="w-full border rounded-md px-3 py-2 shadow-md">
       <div className="mb-6">
         <label htmlFor="date" className="mr-4">
           Select Date:
@@ -57,58 +42,72 @@ const DataTable = ({ data }: Props) => {
         />
       </div>
 
-      {filteredData.length === 0 ? (
-        <p className="">No record found...</p>
+      {!data ? (
+        <div className="flex gap-5 py-5">
+          <p className="">No record found...</p>
+          {selectedDate !== formatDateToString(new Date()) && (
+            <Link href="/create">
+              <span className=" border rounded-md px-4 py-2 font-bold hover:border-purple-600">
+                Create entry
+              </span>
+            </Link>
+          )}
+        </div>
       ) : (
-        filteredData.map((entry, index) => (
-          <div key={index} className="mb-6">
+        <div className="mb-6 flex flex-col sm:flex-row gap-5">
+          <table className="basis-[70%] w-full table-auto text-md border-collapse border rounded-lg">
+            <thead className="text-left bg-gray-200">
+              <tr>
+                <th className="border px-4 py-2">SN</th>
+                <th className="border px-4 py-2">Amount</th>
+                <th className="border px-4 py-2">Quantity</th>
+                <th className="border px-4 py-2">Total</th>
+              </tr>
+            </thead>
+            <tbody className="bg-gray-100">
+              {data.prices.map((price, priceIndex) => (
+                <tr key={priceIndex}>
+                  <td className="border px-4 py-2">{priceIndex + 1}</td>
+                  <td className="border px-4 py-2">{price.amount}</td>
+                  <td className="border px-4 py-2">{price.quantity}</td>
+                  <td className="border px-4 py-2">{price.total}</td>
+                </tr>
+              ))}
+            </tbody>
+
+            <tfoot>
+              <tr className="bg-gray-200">
+                <td
+                  colSpan={3}
+                  className="border px-4 py-2 font-bold text-right"
+                >
+                  Overall Total
+                </td>
+                <td className="border px-4 py-2 font-bold text-right">
+                  {data.total}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+          <div>
             <table className="w-full table-auto text-md border-collapse border rounded-lg">
               <thead className="text-left bg-gray-200">
                 <tr>
                   <th className="border px-4 py-2">SN</th>
-                  <th className="border px-4 py-2">Amount</th>
-                  <th className="border px-4 py-2">Quantity</th>
-                  <th className="border px-4 py-2">Total</th>
+                  <th className="border px-4 py-2">Bank Deposit</th>
+                  <th className="border px-4 py-2">QR/Fonepay</th>
                 </tr>
               </thead>
               <tbody className="bg-gray-100">
-                {entry.prices.map((price, priceIndex) => (
-                  <tr key={`${index}-${priceIndex}`}>
-                    <td className="border px-4 py-2">{priceIndex + 1}</td>
-                    <td className="border px-4 py-2">{price.amount}</td>
-                    <td className="border px-4 py-2">{price.quantity}</td>
-                    <td className="border px-4 py-2">{price.total}</td>
-                  </tr>
-                ))}
+                <tr>
+                  <td className="border px-4 py-2">1</td>
+                  <td className="border px-4 py-2">{data.bankDeposit}</td>
+                  <td className="border px-4 py-2">{data.qrDeposit}</td>
+                </tr>
               </tbody>
-
-              <tfoot>
-                <tr className="bg-gray-100">
-                  <td
-                    colSpan={3}
-                    className="border px-4 py-2 font-bold text-right"
-                  >
-                    Bank Deposit
-                  </td>
-                  <td className="border px-4 py-2 font-bold text-right">
-                    {entry.bankDeposit}
-                  </td>
-                </tr>
-                <tr className="bg-gray-200">
-                  <td
-                    colSpan={3}
-                    className="border px-4 py-2 font-bold text-right"
-                  >
-                    Overall Total
-                  </td>
-                  <td className="border px-4 py-2 font-bold text-right">
-                    {entry.total}
-                  </td>
-                </tr>
-              </tfoot>
             </table>
           </div>
-        ))
+        </div>
       )}
     </div>
   );

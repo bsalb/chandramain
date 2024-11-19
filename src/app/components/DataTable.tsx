@@ -79,15 +79,29 @@ const DataTable = ({ data }: Props) => {
                   </tr>
                 ))}
               </tbody>
-              <tfoot className="bg-gray-200">
-                <tr>
+
+              <tfoot>
+                <tr className="bg-gray-100">
+                  <td
+                    colSpan={3}
+                    className="border px-4 py-2 font-bold text-right"
+                  >
+                    Bank Deposit
+                  </td>
+                  <td className="border px-4 py-2 font-bold text-right">
+                    {entry.bankDeposit}
+                  </td>
+                </tr>
+                <tr className="bg-gray-200">
                   <td
                     colSpan={3}
                     className="border px-4 py-2 font-bold text-right"
                   >
                     Overall Total
                   </td>
-                  <td className="border px-4 py-2 font-bold">{entry.total}</td>
+                  <td className="border px-4 py-2 font-bold text-right">
+                    {entry.total}
+                  </td>
                 </tr>
               </tfoot>
             </table>

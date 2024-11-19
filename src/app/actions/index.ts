@@ -11,6 +11,7 @@ export async function saveData(newData: {
   date: string;
   prices: any[];
   total: number;
+  bankDeposit: number;
 }) {
   await db.read();
 

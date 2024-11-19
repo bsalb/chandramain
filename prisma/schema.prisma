@@ -11,9 +11,10 @@ datasource db {
 model CurrencyList {
   id       Int     @id @default(autoincrement())
   date     DateTime @unique
-  bankDeposit Int
   total    Float
   prices   Currency[]
+  bankDeposit Int @default(0)
+  qrDeposit Int @default(0)
 }
 
 model Currency {

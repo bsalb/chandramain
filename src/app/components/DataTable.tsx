@@ -8,10 +8,10 @@ import { getDataByDate } from "../actions/currencyActions";
 import toast from "react-hot-toast";
 
 const DataTable = () => {
+  const today = formatDateToString(new Date());
+
   const [data, setData] = useState<CurrencyList>();
-  const [selectedDate, setSelectedDate] = useState<string>(
-    formatDateToString(new Date())
-  );
+  const [selectedDate, setSelectedDate] = useState<string>(today);
 
   const fetchData = async (date: string) => {
     try {
@@ -21,6 +21,7 @@ const DataTable = () => {
       }
     } catch {
       toast.error("No data found...");
+      setSelectedDate(today);
     }
   };
 
@@ -50,7 +51,7 @@ const DataTable = () => {
       {!data ? (
         <div className="flex gap-5 py-5">
           <p className="">No record found...</p>
-          {selectedDate === formatDateToString(new Date()) && (
+          {selectedDate === today && (
             <Link href="/create">
               <span className=" border rounded-md px-4 py-2 font-bold hover:border-purple-600">
                 Create entry

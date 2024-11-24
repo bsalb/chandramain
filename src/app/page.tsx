@@ -1,11 +1,9 @@
 import { Toaster } from "react-hot-toast";
-import { getPaginatedData } from "./actions/currencyActions";
+
 import DataTable from "./components/DataTable";
 import ResultTable from "./components/Result";
 
 export default async function Home() {
-  const paginatedData = await getPaginatedData(1);
-
   return (
     <div className="w-full h-full">
       <Toaster position="top-right" reverseOrder={false} />
@@ -13,14 +11,10 @@ export default async function Home() {
         <div className="w-full">
           <DataTable />
         </div>
-
         <div className="flex flex-col gap-2">
           <h1 className="font-bold text-lg">Sales Records</h1>
           <div className="w-1/2">
-            <ResultTable
-              initialData={paginatedData.data}
-              totalCount={paginatedData.totalCount}
-            />
+            <ResultTable />
           </div>
         </div>
       </div>

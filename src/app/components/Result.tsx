@@ -1,19 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CurrencyList } from "@prisma/client";
 
 import { PAGE_SIZE } from "@/constants";
 import { formatDateToString } from "@/lib/formateDate";
 import { getPaginatedData } from "../actions/currencyActions";
 
-interface Props {
-  initialData: CurrencyList[];
-  totalCount: number;
-}
-
-const ResultTable = ({ initialData, totalCount }: Props) => {
-  const [data, setData] = useState<CurrencyList[]>(initialData);
+const ResultTable = () => {
+  const [data, setData] = useState<CurrencyList[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
   const pageSize = PAGE_SIZE;
   const totalPage = Math.ceil(totalCount / pageSize);
 
@@ -21,14 +18,18 @@ const ResultTable = ({ initialData, totalCount }: Props) => {
     const res = await getPaginatedData(page);
     if (res) {
       setData(res.data);
+      setTotalCount(res.totalCount);
     }
   };
+
+  useEffect(() => {
+    fetchPageData(currentPage);
+  }, [currentPage]);
 
   const handleNextPage = () => {
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
       setCurrentPage(nextPage);
-      fetchPageData(nextPage);
     }
   };
 
@@ -36,7 +37,6 @@ const ResultTable = ({ initialData, totalCount }: Props) => {
     if (currentPage > 1) {
       const prevPage = currentPage - 1;
       setCurrentPage(prevPage);
-      fetchPageData(prevPage);
     }
   };
 

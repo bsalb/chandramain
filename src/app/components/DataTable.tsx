@@ -19,7 +19,7 @@ const DataTable = () => {
       if (data) {
         setData(data);
       }
-    } catch (error) {
+    } catch (_) {
       toast.error("No data found...");
     }
   };

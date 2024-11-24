@@ -63,7 +63,7 @@ const CreateDataPage = () => {
       await saveData(payload);
       toast.success("Data successfully saved.");
       router.push("/");
-    } catch (error) {
+    } catch (_) {
       toast.error("Failed to save data.");
     } finally {
       setLoading(false);

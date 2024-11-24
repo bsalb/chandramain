@@ -50,7 +50,7 @@ const DataTable = () => {
       {!data ? (
         <div className="flex gap-5 py-5">
           <p className="">No record found...</p>
-          {selectedDate !== formatDateToString(new Date()) && (
+          {selectedDate === formatDateToString(new Date()) && (
             <Link href="/create">
               <span className=" border rounded-md px-4 py-2 font-bold hover:border-purple-600">
                 Create entry

@@ -17,7 +17,7 @@ export default function Login() {
     try {
       await loginAction({ username, password });
       router.push("/");
-    } catch (error) {
+    } catch {
       toast.error("Login failed. Try again");
     } finally {
       setLoading(false);

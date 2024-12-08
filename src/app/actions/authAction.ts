@@ -1,9 +1,7 @@
 "use server";
-
 import bcrypt from "bcrypt";
 import { prisma } from "../../lib/client";
 import { generateAccessToken, verifyToken } from "@/lib/jwt";
-import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 export async function loginAction({
@@ -39,7 +37,6 @@ export async function loginAction({
 }
 
 export async function getUser() {
-  "use server";
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
   const decoded = verifyToken(accessToken as string);
@@ -53,7 +50,6 @@ export async function getUser() {
 
 export const logout = async () => {
   const cookieStore = await cookies();
-
   cookieStore.set("access_token", "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

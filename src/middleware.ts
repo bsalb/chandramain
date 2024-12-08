@@ -11,7 +11,7 @@ export function middleware(req: NextRequest) {
   try {
     verifyToken(token);
     return NextResponse.next();
-  } catch (error) {
+  } catch {
     return NextResponse.redirect(new URL("/auth/login", req.url));
   }
 }

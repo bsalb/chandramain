@@ -1,13 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { CurrencyList } from "@prisma/client";
+import { DailyCashRecord } from "@prisma/client";
 
 import { PAGE_SIZE } from "@/constants";
 import { formatDateToString } from "@/lib/formateDate";
 import { getPaginatedData } from "../actions/currencyActions";
+import { getUser } from "../actions/authAction";
 
 const ResultTable = () => {
-  const [data, setData] = useState<CurrencyList[]>([]);
+  const [data, setData] = useState<DailyCashRecord[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
@@ -15,7 +16,8 @@ const ResultTable = () => {
   const totalPage = Math.ceil(totalCount / pageSize);
 
   const fetchPageData = async (page: number) => {
-    const res = await getPaginatedData(page);
+    const user = await getUser();
+    const res = await getPaginatedData(user?.id, page);
     if (res) {
       setData(res.data);
       setTotalCount(res.totalCount);
@@ -41,11 +43,11 @@ const ResultTable = () => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       {data.length === 0 ? (
         <p className="text-center">No record found...</p>
       ) : (
-        <>
+        <div className="w-full flex flex-col gap-4">
           <table className="w-full table-auto text-md border-collapse border rounded-lg">
             <thead className="text-left bg-gray-200">
               <tr>
@@ -110,7 +112,7 @@ const ResultTable = () => {
             </tfoot>
           </table>
 
-          <div className="flex justify-between items-center mt-4">
+          <div className="w-full flex-1 flex justify-between items-center">
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
@@ -137,7 +139,7 @@ const ResultTable = () => {
               Next
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

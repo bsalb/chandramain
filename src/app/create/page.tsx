@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
-import { saveData } from "../actions/currencyActions";
+import { saveDataToCompany } from "../actions/currencyActions";
 import { CustomInput } from "../components/CustomInput";
+import { getUser } from "../actions/authAction";
 
 const CreateDataPage = () => {
   const router = useRouter();
@@ -50,6 +51,8 @@ const CreateDataPage = () => {
   const handleEntry = async () => {
     try {
       setLoading(true);
+      const user = await getUser();
+
       const payload = {
         date: selectedDate,
         prices: prices.map((price) => ({
@@ -59,8 +62,9 @@ const CreateDataPage = () => {
         bankDeposit: parseInt(bankDeposit, 10),
         qrDeposit: parseInt(qrDeposit, 10),
         total: calculateOverallTotal(),
+        userId: user?.id,
       };
-      await saveData(payload);
+      await saveDataToCompany(payload);
       toast.success("Data successfully saved.");
       router.push("/");
     } catch {
@@ -72,7 +76,6 @@ const CreateDataPage = () => {
 
   return (
     <div className="flex flex-col gap-2 p-4">
-      <Toaster position="top-right" reverseOrder={false} />
       <span
         className="font-bold text-sm cursor-pointer hover:underline"
         onClick={() => router.back()}

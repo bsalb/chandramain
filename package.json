@@ -2,15 +2,22 @@
   "name": "currency_counter",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed": "ts-node --esm prisma/seed.ts",
+    "db:deploy": "npx prisma migrate deploy",
+    "db:gen": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev --name"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
     "lowdb": "^7.0.1",
     "next": "15.0.3",
     "prisma": "^5.22.0",
@@ -19,6 +26,8 @@
     "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -26,6 +35,7 @@
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

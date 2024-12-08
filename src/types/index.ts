@@ -3,7 +3,6 @@ export interface CurrencyDetail {
   amount: number;
   quantity: number;
   total: number;
-  currencyDataId: number;
 }
 
 export interface CurrencyList {

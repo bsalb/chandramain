@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,20 +7,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model CurrencyList {
-  id       Int     @id @default(autoincrement())
-  date     DateTime @unique
-  total    Float
-  prices   Currency[]
-  bankDeposit Int @default(0)
-  qrDeposit Int @default(0)
+model Company {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  cashRecords DailyCashRecord[]
+  users       User[]           @relation("CompanyUsers")
+}
+
+model User {
+  id          Int              @id @default(autoincrement())
+  username    String           @unique
+  password    String
+  name        String
+  role        UserRole         @default(USER)
+  companies   Company[]        @relation("CompanyUsers")
+  cashRecords DailyCashRecord[] @relation("UserCashRecords")
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model DailyCashRecord {
+  id          Int         @id @default(autoincrement())
+  date        DateTime
+  total       Float
+  prices      Currency[]
+  bankDeposit Int         @default(0)
+  qrDeposit   Int         @default(0)
+  company     Company     @relation(fields: [companyId], references: [id])
+  companyId   Int
+  user        User        @relation("UserCashRecords", fields: [userId], references: [id])
+  userId      Int
+
+  @@unique([date, companyId])
 }
 
 model Currency {
-  id            Int     @id @default(autoincrement())
-  amount        Float
-  quantity      Int
-  total         Float
-  currencyData  CurrencyList @relation(fields: [currencyDataId], references: [id])
-  currencyDataId Int
+  id              Int              @id @default(autoincrement())
+  amount          Float
+  quantity        Int
+  total           Float
+  dailyCashRecord DailyCashRecord  @relation(fields: [dailyCashRecordId], references: [id])
+  dailyCashRecordId Int
 }
+  
